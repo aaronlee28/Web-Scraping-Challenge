@@ -13,62 +13,87 @@ def scrape():
     mars = {}
 
     url = 'https://mars.nasa.gov/news/'
-    url2 = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, "html.parser")
     browser.visit(url)
 
-    html = browser.html
-    soup = BeautifulSoup(html, "html.parser")
+    # Results are returned as an iterable list 
+    results = soup.find_all('div', class_='slide')
+    # Title
+    for result in results: 
+    # Error handling 
+        try: 
+            # Identify and return title of listing 
+            news_title = result.find('div', class_='content_title').text.strip() 
 
+            # Identify and return paragraph of listing 
+            news_p = result.find('div', class_='rollover_description_inner').text.strip()
+
+        # Print results only if title and price are available 
+            if (news_title and news_p):
+                print('----------------')
+                print(f'news_title = {news_title}')
+                print(f'news_p = {news_p}')
+        except AttributeError as e:
+            print(e)
     # Latest Mars News
-    mars["title"] = soup.find('div', class_='content_title').text.strip() 
-    
+    mars["title"] = news_title
     # Latest Mars paragraph
-    mars["paragraph"] = soup.find('div', class_='rollover_description_inner').text.strip()
+    mars["paragraph"] = news_p
     
-    # Featured Link
-    mars["img_link"] = soup.find(class_='headerimage fade-in')['src']
 
-    # Mars Table 
-    mars_facts = pd.read_html('https://space-facts.com/mars/')
-    df = mars_facts[0]
-    html = df.to_html()
-    mars['table'] = html
+    # # Featured Link
+    executable_path = {'executable_path': ChromeDriverManager().install()}
+    browser = Browser('chrome', **executable_path, headless=False)
+    url = 'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/index.html'
+    browser.visit(url)    
+    html = browser.html
+    soup = BeautifulSoup(html, 'html.parser')  
+    link = soup.find(class_='headerimage fade-in')['src'] 
+    featured_image_url= f"https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/{link}"   
+    mars["img_link"] = featured_image_url
 
-    # List of names - Mars Hemisphere
-    # Grab all the titles 
-    name_lists = []
-    browser.visit(url2)
+    # # Mars Table 
+    # mars_facts = pd.read_html('https://space-facts.com/mars/')
+    # df = mars_facts[0]
+    # html = df.to_html()
+    # mars['table'] = html
 
-    for x in range (1,2):
-        html = browser.html
-        soup = BeautifulSoup(html, 'html.parser')  
+    # # List of names - Mars Hemisphere
+    # # Grab all the titles 
+    # name_lists = []
+    # browser.visit(url2)
 
-    name_dict = soup.find_all('h3')
+    # for x in range (1,2):
+    #     html = browser.html
+    #     soup = BeautifulSoup(html, 'html.parser')  
 
-    for x in name_dict:
-        name_lists.append(x.text) 
+    # name_dict = soup.find_all('h3')
 
-    # Mars Hemispheres - Name 
-    mars['names'] = name_lists
+    # for x in name_dict:
+    #     name_lists.append(x.text) 
 
-    # Image URLS - Mars Hemisphere 
-    urls = []
-    img_url = []
-    browser.visit(url2)
-    for name in name_lists:
-        browser.click_link_by_partial_text(name)
+    # # Mars Hemispheres - Name 
+    # mars['names'] = name_lists
+
+    # # Image URLS - Mars Hemisphere 
+    # urls = []
+    # img_url = []
+    # browser.visit(url2)
+    # for name in name_lists:
+    #     browser.click_link_by_partial_text(name)
     
-        html = browser.html
-        soup = BeautifulSoup(html, 'html.parser')  
-        result = soup.find(class_='downloads')
+    #     html = browser.html
+    #     soup = BeautifulSoup(html, 'html.parser')  
+    #     result = soup.find(class_='downloads')
     
-        for x in result.find_all('a'):
-            urlslink=x['href']
-            urls.append(urlslink)
-        img_url.append(urls[1])
-        urls = urls[2:-2]
-        browser.back()
-    mars['url'] = img_url
+    #     for x in result.find_all('a'):
+    #         urlslink=x['href']
+    #         urls.append(urlslink)
+    #     img_url.append(urls[1])
+    #     urls = urls[2:-2]
+    #     browser.back()
+    # mars['url'] = img_url
     
     # Close the browser 
     browser.quit()
