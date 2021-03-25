@@ -17,19 +17,19 @@
       <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data</a></p>
     </div>
 
-    <!-- Mars News  -->
+    <!-- Mars Newws  -->
     <div class="row" id="news">
       <div class="col-md-12">
         <h2 class="heading">Latest Mars News</h2>
-        <h4 class="title">{{mars.title}}</h4>
-        <small>{{mars.paragraph}}</small>
+        <h4 class="title">{{ mars.title }}</h4>
+        <small>{{ mars.paragraph }}</small>
       </div>
     </div>
     <!-- Featured Image and Table -->
     <div class='row'>
       <div class="col-md-7"> 
           <h5 class="title">Featured Mars Image</h5>
-          <img src="{{mars.img_link}}" alt = 'mars'>
+          <img src="{{ mars.img_link }}" alt = 'mars'>
       </div>    
       
       <div class="col-md-5">
@@ -38,9 +38,9 @@
       </div>
     </div> 
     <hr>
-    <hr>
-    <!-- Mars Hemisphere -->
-    <div class='row'>
+    <hr> 
+    <!-- Mars Hemisphere-->
+    <div class='row'> 
       <div class="col-md-12">
         <h2 align="center" class="title">Mars Facts</h2>
       </div>
@@ -48,10 +48,42 @@
 
     <div class='row'>
       <div class="col-md-6">
-        <div class="card" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
+        <div class="card">
+          <img src="{{ mars.url1 }}" class="card-img-top" alt="...">
           <div class="card-body">
-            <h5 align="center" class="card-title">Card title</h5>
+            <h5 align="center" class="card-title">{{ mars.hemisphere_1 }}</h5>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-md-6">
+        <div class="card">
+          <img src="{{ mars.url2 }}" class="card-img-top" alt="che">
+          <div class="card-body">
+            <h5 align="center" class="card-title">{{ mars.hemisphere_2 }}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+      
+      <div class='row'>
+        <div class="col-md-6">
+          <div class="card">
+            <img src="{{ mars.url3 }}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 align="center" class="card-title">{{ mars.hemisphere_3 }}</h5>
+            </div>
+          </div>
+        </div>
+  
+  
+        <div class="col-md-6">
+          <div class="card">
+            <img src="{{ mars.url4 }}" class="card-img-top" alt="che">
+            <div class="card-body">
+              <h5 align="center" class="card-title">{{ mars.hemisphere_4 }}</h5>
+            </div>
           </div>
         </div>
       </div>

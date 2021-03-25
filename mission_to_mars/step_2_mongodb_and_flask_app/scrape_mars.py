@@ -53,50 +53,62 @@ def scrape():
     featured_image_url= f"https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/{link}"   
     mars["img_link"] = featured_image_url
 
-    # # Mars Table 
-    # mars_facts = pd.read_html('https://space-facts.com/mars/')
-    # df = mars_facts[0]
-    # html = df.to_html()
-    # mars['table'] = html
+    # Mars Hemishpere
+    # Grab all the titles 
+    executable_path = {'executable_path': ChromeDriverManager().install()}
+    browser = Browser('chrome', **executable_path, headless=False)
 
-    # # List of names - Mars Hemisphere
-    # # Grab all the titles 
-    # name_lists = []
-    # browser.visit(url2)
+    name_lists = []
 
-    # for x in range (1,2):
-    #     html = browser.html
-    #     soup = BeautifulSoup(html, 'html.parser')  
+    url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+    browser.visit(url)
 
-    # name_dict = soup.find_all('h3')
+    for x in range (1,2):
+        html = browser.html
+        soup = BeautifulSoup(html, 'html.parser')  
 
-    # for x in name_dict:
-    #     name_lists.append(x.text) 
+        name_dict = soup.find_all('h3')
 
-    # # Mars Hemispheres - Name 
-    # mars['names'] = name_lists
+    for x in name_dict:
+        name_lists.append(x.text) 
 
-    # # Image URLS - Mars Hemisphere 
-    # urls = []
-    # img_url = []
-    # browser.visit(url2)
-    # for name in name_lists:
-    #     browser.click_link_by_partial_text(name)
-    
-    #     html = browser.html
-    #     soup = BeautifulSoup(html, 'html.parser')  
-    #     result = soup.find(class_='downloads')
-    
-    #     for x in result.find_all('a'):
-    #         urlslink=x['href']
-    #         urls.append(urlslink)
-    #     img_url.append(urls[1])
-    #     urls = urls[2:-2]
-    #     browser.back()
-    # mars['url'] = img_url
-    
-    # Close the browser 
-    browser.quit()
+    mars['hemisphere_1'] = name_lists[0]
+    mars['hemisphere_2'] = name_lists[1]
+    mars['hemisphere_3'] = name_lists[2]
+    mars['hemisphere_4'] = name_lists[3]
 
-    # Return the result
+
+    # Grab all the urls 
+    executable_path = {'executable_path': ChromeDriverManager().install()}
+    browser = Browser('chrome', **executable_path, headless=False)
+
+
+    urls = []
+    img_url = []
+
+    url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+    browser.visit(url)
+
+    # for y in range (1,2):
+    html = browser.html
+    soup = BeautifulSoup(html, 'html.parser')  
+
+    for name in name_lists:
+        browser.click_link_by_partial_text(name)
+        
+        html = browser.html
+        soup = BeautifulSoup(html, 'html.parser')  
+        result = soup.find(class_='downloads')
+        
+        for x in result.find_all('a'):
+            urlslink=x['href']
+            urls.append(urlslink)
+        img_url.append(urls[0])
+        urls = urls[2:-2]
+        browser.back()
+
+    mars['url1'] = img_url[0]
+    mars['url2'] = img_url[1]
+    mars['url3'] = img_url[2]
+    mars['url4'] = img_url[3]
     return mars
