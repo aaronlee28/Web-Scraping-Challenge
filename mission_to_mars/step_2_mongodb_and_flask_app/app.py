@@ -8,10 +8,6 @@ app = Flask(__name__)
 mongo = PyMongo(app, uri="mongodb://localhost:27017/mars_mongo")
 
 
-# Or set inline
-# mongo = PyMongo(app, uri="mongodb://localhost:27017/phone_app")
-
-
 @app.route("/")
 def index():
     mars = mongo.db.mars.find_one()

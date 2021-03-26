@@ -1,0 +1,14 @@
+
+
+.jumbotron {
+    background-image: url('https://image.freepik.com/free-vector/mars-landscape-background-with-flat-design_23-2147979445.jpg'); 
+    background-size: cover;
+    
+}
+body {
+    background-image: url('https://wallpapercave.com/wp/wp3006038.png');
+    background-size: cover;
+}
+.container {
+    background-color:rgba(0, 0, 0, 0.5);
+}
