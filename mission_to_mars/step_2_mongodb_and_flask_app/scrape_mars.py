@@ -18,28 +18,21 @@ def scrape():
     browser.visit(url)
 
     # Results are returned as an iterable list 
+    title = []
+    paragraph = []
     results = soup.find_all('div', class_='slide')
     # Title
     for result in results: 
-    # Error handling 
-        try: 
-            # Identify and return title of listing 
-            news_title = result.find('div', class_='content_title').text.strip() 
-
-            # Identify and return paragraph of listing 
-            news_p = result.find('div', class_='rollover_description_inner').text.strip()
-
-        # Print results only if title and price are available 
-            if (news_title and news_p):
-                print('----------------')
-                print(f'news_title = {news_title}')
-                print(f'news_p = {news_p}')
-        except AttributeError as e:
-            print(e)
+        # Identify and return title of listing 
+        news_title = result.find('div', class_='content_title').text.strip() 
+        title.append(news_title)
+        # Identify and return paragraph of listing 
+        news_p = result.find('div', class_='rollover_description_inner').text.strip()
+        paragraph.append(news_p)
     # Latest Mars News
-    mars["title"] = news_title
+    mars["title"] = title[0]
     # Latest Mars paragraph
-    mars["paragraph"] = news_p
+    mars["paragraph"] = paragraph[0]
     
 
     # # Featured Link
